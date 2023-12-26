@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:playground/main.dart';
 import 'package:playground/pages/info_page.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../models/setup.dart';
 
@@ -83,15 +85,13 @@ class _LoginFormState extends State<LoginForm> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  createSetup(usuarioController.text, senhaController.text, aliasController.text)
+                  // createSetup(usuarioController.text, senhaController.text, aliasController.text)
+                  createSetup("derick.matheus", "123456", "novotempo") // TODO: voltar ao original
                   .then((value) {
+                  Provider.of<Authentication>(context, listen: false).setup = value;
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => InfoPage()));
+                      MaterialPageRoute(builder: (context) => const InfoPage()));
                   });
-
-                  if (_formKey.currentState!.validate()) {
-                    // Process data.
-                  }
                 },
                 child: const Text('Enviar'),
               ),

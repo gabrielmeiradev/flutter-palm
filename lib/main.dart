@@ -13,7 +13,7 @@ void main() {
   );
 }
 
-class Authentication extends ChangeNotifier{
+class Authentication extends ChangeNotifier {
   Setup? _setup;
 
   set setup(Setup setup) {
