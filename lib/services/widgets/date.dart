@@ -11,7 +11,6 @@ class DateInput extends StatelessWidget {
   Widget build(BuildContext context) {
     var initialDate = DateFormat("dd/MM/yy").parse(option["initialDate"]);
     var finalDate = DateFormat("dd/MM/yy").parse(option["finalDate"]);
-    print(option);
     return DateTimePicker(
       type: DateTimePickerType.date,
       icon: const Icon(Icons.event),
