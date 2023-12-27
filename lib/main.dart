@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:playground/models/setup.dart';
 import 'package:playground/pages/app_page.dart';
+import 'package:playground/providers/authentication.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -10,24 +10,6 @@ void main() {
       child: const MyApp(),
     ),
   );
-}
-
-class Authentication extends ChangeNotifier{
-  Setup? _setup;
-
-  set setup(Setup setup) {
-    _setup = setup;
-    notifyListeners();
-  } 
-
-  Setup get setup {
-    if(_setup == null) {
-      throw Exception("Não autenticado");
-    }
-
-    return _setup!;
-  }
-
 }
 
 class MyApp extends StatelessWidget {
