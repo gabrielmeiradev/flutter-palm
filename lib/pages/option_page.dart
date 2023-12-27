@@ -1,56 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:playground/components/app_bar.dart';
-import 'package:playground/services/widget_converter.dart';
+import 'package:playground/pages/components/app_bar.dart';
+import 'package:playground/pages/components/my_bottom_bar.dart';
+import 'package:playground/widget_converter/widget_converter.dart';
 
-class OptionPage extends StatelessWidget {
+class OptionPage extends StatefulWidget {
   const OptionPage({super.key, required this.option});
 
   final Map<String, dynamic> option;
 
   @override
-  Widget build(BuildContext context) {  
-    var campos = option['campos'] ?? List;
+  State<OptionPage> createState() => _OptionPageState();
+}
 
-    List<Widget> camposContainer = [];
+class _OptionPageState extends State<OptionPage> {
+  late List<Widget> camposContainer;
 
-    campos.forEach((campo) {
-      camposContainer.add(widgetConverter(campo));
-    });
+  @override
+  void initState() {
+    super.initState();
 
+    List<Map<String, dynamic>> campos = ((widget.option['campos'] ?? []) as List).map<Map<String, dynamic>>((e) => Map<String,dynamic>.from(e)).toList();
+    camposContainer = campos.map(WidgetConverter.fromJson).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(title: option['cabecalho'] ?? option['Title']),
-      body:  Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          // crossAxisCount: 2,
-          // crossAxisSpacing: 10,
-          children: camposContainer  
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-          
-          child: IconTheme(
-            data: IconThemeData(color: Theme.of(context).colorScheme.onBackground),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                IconButton(
-                  tooltip: 'Voltar',
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                   Navigator.of(context).pop();
-                  },
-                ),
-                IconButton(
-                  tooltip: 'Procurar',
-                  icon: const Icon(Icons.search),
-                  onPressed: () {},
-                ),
-              ],
-            ),
+        appBar: MyAppBar(
+            title: widget.option['cabecalho'] ?? widget.option['Title'] ?? "Null Title"),
+        body: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            children: camposContainer,
           ),
-        )
-      );
+        ),
+        bottomNavigationBar: const MyBottomBar());
   }
 }
