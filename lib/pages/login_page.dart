@@ -17,12 +17,13 @@ Future<Setup> createSetup(String usuario, String senha, String alias) async {
   final url =
       'https://server.palmapp.com.br/rest/applogin?usuario=$usuario&senha=$senha&alias=$alias';
   final response = await http.post(Uri.parse(url), headers: <String, String>{
-    'Content-Type': 'application/json; charset=UTF-8',
+    'Content-Type': 'application/json', 
+    'charset':'utf-8',
   });
 
   if (response.statusCode == 201) {
     Setup setup =
-        Setup.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+        Setup.fromJson(jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
     return setup;
   } else {
     throw Exception("Erro ao autenticar");
@@ -86,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
               child: ElevatedButton(
                 onPressed: () async {
                   // createSetup(usuarioController.text, senhaController.text, aliasController.text)
-                  createSetup("derick.matheus", "123456", "novotempo") // TODO: voltar ao original
+                  createSetup("humberto.gunzi", "123456", "sumi-intra") // TODO: voltar ao original
                   .then((value) {
                   Provider.of<Authentication>(context, listen: false).setup = value;
                   Navigator.pushReplacement(context,

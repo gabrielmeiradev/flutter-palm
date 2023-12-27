@@ -3,7 +3,6 @@ import 'package:playground/models/setup.dart';
 import 'package:playground/pages/app_page.dart';
 import 'package:provider/provider.dart';
 
-
 void main() {
    runApp(
     ChangeNotifierProvider(
@@ -13,7 +12,7 @@ void main() {
   );
 }
 
-class Authentication extends ChangeNotifier {
+class Authentication extends ChangeNotifier{
   Setup? _setup;
 
   set setup(Setup setup) {
