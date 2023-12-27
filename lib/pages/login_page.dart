@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:playground/main.dart';
+import 'package:playground/core/app_constants.dart';
 import 'package:playground/pages/info_page.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../models/setup.dart';
+import '../providers/authentication.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -15,15 +16,13 @@ class LoginForm extends StatefulWidget {
 
 Future<Setup> createSetup(String usuario, String senha, String alias) async {
   final url =
-      'https://server.palmapp.com.br/rest/applogin?usuario=$usuario&senha=$senha&alias=$alias';
-  final response = await http.post(Uri.parse(url), headers: <String, String>{
-    'Content-Type': 'application/json', 
-    'charset':'utf-8',
-  });
+      '${AppConstants.authUrl}applogin?usuario=$usuario&senha=$senha&alias=$alias';
+  final response = await http.post(Uri.parse(url));
 
   if (response.statusCode == 201) {
     Setup setup =
         Setup.fromJson(jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
+
     return setup;
   } else {
     throw Exception("Erro ao autenticar");
@@ -32,12 +31,21 @@ Future<Setup> createSetup(String usuario, String senha, String alias) async {
 
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
   final usuarioController = TextEditingController();
   final senhaController = TextEditingController();
   final aliasController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+                  //     createSetup("humberto.gunzi", "123456", "sumi-intra")
+                  // .then((value) {
+                  // Provider.of<Authentication>(context, listen: false).setup = value;
+                  
+                  // Navigator.pushReplacement(context,
+                  //     MaterialPageRoute(builder: (context) => const InfoPage()));
+                  // });
+
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Form(
@@ -86,10 +94,10 @@ class _LoginFormState extends State<LoginForm> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  // createSetup(usuarioController.text, senhaController.text, aliasController.text)
-                  createSetup("humberto.gunzi", "123456", "sumi-intra") // TODO: voltar ao original
+                  createSetup(usuarioController.text, senhaController.text, aliasController.text)
                   .then((value) {
                   Provider.of<Authentication>(context, listen: false).setup = value;
+                  
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => const InfoPage()));
                   });
